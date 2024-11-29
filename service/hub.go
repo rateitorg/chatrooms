@@ -38,6 +38,16 @@ func (h *Hub) Run() {
 				delete(h.Clients, client) // Remove from map
 				close(client.Send) // Close the send channel
 			}
+		case messages := <-h.Broadcast: // If there is something in the broadcast channel
+			for client := range h.Clients {
+				// TODO: performance optimization. If the client is the sender, don't send the message back to the client
+				select {
+				case client.Send <- messages: // Send the message to the client
+				default:
+					delete(h.Clients, client) // Remove the client if the send channel is full
+					close(client.Send) // Close the send channel
+				}
+			}
 		}
 	}
 }
