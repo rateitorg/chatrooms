@@ -1,9 +1,10 @@
 package service
 
 import (
-	"github.com/rateitorg/chatrooms/entity"
-	"github.com/gorilla/websocket"
 	"time"
+
+	"github.com/gorilla/websocket"
+	"github.com/rateitorg/chatrooms/entity"
 )
 
 const (
@@ -27,7 +28,7 @@ type Client struct {
 	Conn *websocket.Conn
 
 	// Buffered channel of outbound messages
-	Send chan []entity.Message
+	Send chan entity.Message
 }
 
 // Takes a message from client and sends it to the hub
@@ -48,7 +49,7 @@ func (client *Client) Write() {
 
 	// Continuously listen for messages from the client
 	for {
-		var message []entity.Message
+		var message entity.Message
 		err := client.Conn.ReadJSON(&message)
 		if err != nil {
 			// TODO: Handler error gracefully

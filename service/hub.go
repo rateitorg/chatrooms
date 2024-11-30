@@ -10,7 +10,7 @@ type Hub struct {
 	Clients map[*Client]bool
 
 	// Inbound messages from the clients.
-	Broadcast chan []entity.Message
+	Broadcast chan entity.Message
 
 	// Register requests from the clients.
 	Register chan *Client
@@ -22,7 +22,10 @@ type Hub struct {
 // NewHub creates a new hub.
 func NewHub() *Hub {
 	return &Hub{
-		Broadcast: make(chan []entity.Message),
+		Clients:    make(map[*Client]bool),
+		Broadcast:  make(chan entity.Message),
+		Register:   make(chan *Client),
+		Unregister: make(chan *Client),
 	}
 }
 
