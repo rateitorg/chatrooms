@@ -18,7 +18,6 @@ func WebSocketHandler(hub *service.Hub, w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-
 	// Create a new client
 	client := &service.Client{
 		Hub:  hub,

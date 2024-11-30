@@ -13,8 +13,8 @@ const (
 	// The client has pongWait time to respond to the ping.
 	// If the client does not respond within pingPeriod time, the connection is closed.
 
-	writeWait = 10 * time.Second
-	pongWait = 60 * time.Second
+	writeWait  = 10 * time.Second
+	pongWait   = 60 * time.Second
 	pingPeriod = (pongWait * 9) / 10
 	// Maximum message size allowed from the client
 	maxMessageSize = 512
@@ -39,7 +39,7 @@ func (client *Client) Write() {
 		client.Conn.Close()
 	}()
 
-  client.Conn.SetReadLimit(maxMessageSize) // Set the maximum message size
+	client.Conn.SetReadLimit(maxMessageSize)              // Set the maximum message size
 	client.Conn.SetReadDeadline(time.Now().Add(pongWait)) // Set the read deadline
 
 	client.Conn.SetPongHandler(func(string) error {
@@ -92,6 +92,3 @@ func (client *Client) Read() {
 		}
 	}
 }
-
-
-

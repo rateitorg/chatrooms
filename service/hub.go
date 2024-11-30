@@ -39,7 +39,7 @@ func (h *Hub) Run() {
 		case client := <-h.Unregister: // If there is something in the unregister channel
 			if _, ok := h.Clients[client]; ok {
 				delete(h.Clients, client) // Remove from map
-				close(client.Send) // Close the send channel
+				close(client.Send)        // Close the send channel
 			}
 		case messages := <-h.Broadcast: // If there is something in the broadcast channel
 			for client := range h.Clients {
@@ -48,7 +48,7 @@ func (h *Hub) Run() {
 				case client.Send <- messages: // Send the message to the client
 				default:
 					delete(h.Clients, client) // Remove the client if the send channel is full
-					close(client.Send) // Close the send channel
+					close(client.Send)        // Close the send channel
 				}
 			}
 		}
