@@ -14,6 +14,9 @@ func main() {
 	// Create a new hub
 	hub := service.NewHub()
 
+	// Start the hub
+	go hub.Run()
+
 	// Set up routes
 	// Default route
 	engine.GET("ping", func(ctx *gin.Context) {

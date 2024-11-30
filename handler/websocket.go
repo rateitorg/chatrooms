@@ -17,18 +17,21 @@ func WebSocketHandler(hub *service.Hub, w http.ResponseWriter, r *http.Request) 
 		log.Println(err)
 		return
 	}
-	// Close the connection when the function returns
-	defer conn.Close()
+
 
 	// Create a new client
 	client := &service.Client{
 		Hub:  hub,
 		Conn: conn,
-		Send: make(chan []entity.Message),
+		Send: make(chan entity.Message),
 	}
 
 	// Register the client
-	hub.Register <- client
+	client.Hub.Register <- client
+
+	// Start the client's write and read goroutines
+	go client.Write()
+	go client.Read()
 }
 
 // Upgrade upgrades the HTTP connection to a WebSocket connection.
