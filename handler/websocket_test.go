@@ -2,12 +2,12 @@ package handler_test
 
 import (
 	"net/http"
-	"net/http/httptest"
 	"testing"
 
 	"github.com/gorilla/websocket"
 	"github.com/rateitorg/chatrooms/handler"
 	"github.com/rateitorg/chatrooms/service"
+	"github.com/rateitorg/chatrooms/test"
 )
 
 // TestWebSocketHandler tests the WebSocket upgrade logic.
@@ -17,17 +17,14 @@ func TestWebSocketHandler(t *testing.T) {
 	hub := service.NewHub()
 
 	// Create a new test server with the WebSocketHandler as the handler
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	testServer := test.NewTestServer(func(w http.ResponseWriter, r *http.Request) {
 		handler.WebSocketHandler(hub, w, r)
-	}))
-	defer server.Close()
-
-	// Get the WebSocket URL
-	url := "ws" + server.URL[len("http"):]
+	})
+	defer testServer.Close()
 
 	// Act
 	// Create a WebSocket client
-	ws, _, err := websocket.DefaultDialer.Dial(url, nil)
+	ws, _, err := websocket.DefaultDialer.Dial(testServer.URL, nil)
 	if err != nil {
 		t.Fatalf("Could not connect to WebSocket: %v", err)
 	}
