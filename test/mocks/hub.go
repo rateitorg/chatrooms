@@ -10,7 +10,7 @@ type Hub struct {
 	mock.Mock
 }
 
-func (m *Hub) SendToRegisterChannel(client *service.Client) {
+func (m *Hub) SendToRegisterChannel(client *service.Client){
 	m.Called(client)
 }
 
@@ -18,6 +18,6 @@ func (m *Hub) SendToUnregisterChannel(client *service.Client) {
 	m.Called(client)
 }
 
-func (m *Hub) BroadcastMessageBroadcastMessage(message entity.Message) {
+func (m *Hub) SendToBroadcastChannel(message entity.Message) {
 	m.Called(message)
 }

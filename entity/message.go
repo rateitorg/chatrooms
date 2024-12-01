@@ -9,3 +9,12 @@ type Message struct {
 	// Message sent time
 	SentTime string `json:"sentTime"`
 }
+
+// NewMessage creates a new message.
+func NewMessage(content, senderName, sentTime string) *Message {
+	return &Message{
+		Content:   content,
+		SenderName: senderName,
+		SentTime:  sentTime,
+	}
+}
