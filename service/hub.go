@@ -35,22 +35,34 @@ func (h *Hub) Run() {
 	for {
 		select {
 		case client := <-h.Register: // If there is something in the register channel
-			h.Clients[client] = true
+			h.RegisterClient(client)
 		case client := <-h.Unregister: // If there is something in the unregister channel
-			if _, ok := h.Clients[client]; ok {
-				delete(h.Clients, client) // Remove from map
-				close(client.Send)        // Close the send channel
-			}
-		case messages := <-h.Broadcast: // If there is something in the broadcast channel
+			h.UnregisterClient(client)
+		case message := <-h.Broadcast: // If there is something in the broadcast channel
 			for client := range h.Clients {
-				// TODO: performance optimization. If the client is the sender, don't send the message back to the client
-				select {
-				case client.Send <- messages: // Send the message to the client
-				default:
-					delete(h.Clients, client) // Remove the client if the send channel is full
-					close(client.Send)        // Close the send channel
-				}
+				h.BroadcastMessage(client, message)
 			}
 		}
 	}
+}
+
+func (h *Hub) RegisterClient(client *Client) {
+	h.Clients[client] = true
+}
+
+func (h *Hub) UnregisterClient(client *Client) {
+	if _, ok := h.Clients[client]; ok {
+		delete(h.Clients, client) // Remove from map
+		close(client.Send)        // Close the send channel
+	}
+}
+
+func (h *Hub) BroadcastMessage(client *Client, message entity.Message) {
+	// TODO: performance optimization. If the client is the sender, don't send the message back to the client
+	select {
+		case client.Send <- message: // If the send channel is not full send the message
+		default:
+			delete(h.Clients, client) // Remove the client if the send channel is full
+			close(client.Send)        // Close the send channel
+		}
 }
