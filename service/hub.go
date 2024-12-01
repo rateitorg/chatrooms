@@ -4,6 +4,12 @@ import (
 	"github.com/rateitorg/chatrooms/entity"
 )
 
+type HubInterface interface {
+	RegisterClient(client *Client)
+	UnregisterClient(client *Client)
+	BroadcastMessage(client *Client, message entity.Message)
+}
+
 // Hub will hold a set of active clients and broadcast messages.
 type Hub struct {
 	// Registered clients.
