@@ -22,7 +22,7 @@ const (
 
 type Client struct {
 	// The hub that the client belongs to
-	Hub *Hub
+	Hub HubInterface
 
 	// The WebSocket connection
 	Conn *websocket.Conn
@@ -35,7 +35,7 @@ type Client struct {
 func (client *Client) Write() {
 	defer func() {
 		// On exit, unregister the client
-		client.Hub.Unregister <- client
+		client.Hub.SendToUnregisterChannel(client)
 		client.Conn.Close()
 	}()
 
@@ -55,7 +55,7 @@ func (client *Client) Write() {
 			// TODO: Handler error gracefully
 			break
 		}
-		client.Hub.Broadcast <- message
+		client.Hub.SendToBroadcastChannel(message)
 	}
 }
 

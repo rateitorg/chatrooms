@@ -10,7 +10,7 @@ import (
 )
 
 // WebSocketHandler handles WebSocket connections.
-func WebSocketHandler(hub *service.Hub, w http.ResponseWriter, r *http.Request) {
+func WebSocketHandler(hub service.HubInterface, w http.ResponseWriter, r *http.Request) {
 	// Upgrade the HTTP connection to a WebSocket connection
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -26,7 +26,7 @@ func WebSocketHandler(hub *service.Hub, w http.ResponseWriter, r *http.Request) 
 	}
 
 	// Register the client
-	client.Hub.Register <- client
+	client.Hub.SendToRegisterChannel(client)
 
 	// Start the client's write and read goroutines
 	go client.Write()

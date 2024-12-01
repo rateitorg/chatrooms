@@ -5,9 +5,9 @@ import (
 )
 
 type HubInterface interface {
-	RegisterClient(client *Client)
-	UnregisterClient(client *Client)
-	BroadcastMessage(client *Client, message entity.Message)
+	SendToRegisterChannel(client *Client)
+	SendToUnregisterChannel(client *Client)
+	SendToBroadcastChannel(message entity.Message)
 }
 
 // Hub will hold a set of active clients and broadcast messages.
@@ -41,29 +41,43 @@ func (h *Hub) Run() {
 	for {
 		select {
 		case client := <-h.Register: // If there is something in the register channel
-			h.RegisterClient(client)
+			h.registerClient(client)
 		case client := <-h.Unregister: // If there is something in the unregister channel
-			h.UnregisterClient(client)
+			h.unregisterClient(client)
 		case message := <-h.Broadcast: // If there is something in the broadcast channel
 			for client := range h.Clients {
-				h.BroadcastMessage(client, message)
+				h.broadcastMessage(client, message)
 			}
 		}
 	}
 }
 
-func (h *Hub) RegisterClient(client *Client) {
+// Channel data senders
+func (h *Hub) SendToRegisterChannel(client *Client) {
+	h.Register <- client
+}
+
+func (h *Hub) SendToUnregisterChannel(client *Client) {
+	h.Unregister <- client
+}
+
+func (h *Hub) SendToBroadcastChannel(message entity.Message) {
+	h.Broadcast <- message
+}
+
+// Event Handlers
+func (h *Hub) registerClient(client *Client) {
 	h.Clients[client] = true
 }
 
-func (h *Hub) UnregisterClient(client *Client) {
+func (h *Hub) unregisterClient(client *Client) {
 	if _, ok := h.Clients[client]; ok {
 		delete(h.Clients, client) // Remove from map
 		close(client.Send)        // Close the send channel
 	}
 }
 
-func (h *Hub) BroadcastMessage(client *Client, message entity.Message) {
+func (h *Hub) broadcastMessage(client *Client, message entity.Message) {
 	// TODO: performance optimization. If the client is the sender, don't send the message back to the client
 	select {
 		case client.Send <- message: // If the send channel is not full send the message
@@ -72,3 +86,4 @@ func (h *Hub) BroadcastMessage(client *Client, message entity.Message) {
 			close(client.Send)        // Close the send channel
 		}
 }
+
