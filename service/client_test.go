@@ -1,13 +1,14 @@
 package service_test
 
 import (
+	"sync"
+	"testing"
+
 	"github.com/gorilla/websocket"
 	"github.com/rateitorg/chatrooms/entity"
 	"github.com/rateitorg/chatrooms/test"
 	"github.com/rateitorg/chatrooms/test/mocks"
 	"github.com/stretchr/testify/mock"
-	"sync"
-	"testing"
 )
 
 // Test Client Write

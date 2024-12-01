@@ -80,10 +80,9 @@ func (h *Hub) unregisterClient(client *Client) {
 func (h *Hub) broadcastMessage(client *Client, message entity.Message) {
 	// TODO: performance optimization. If the client is the sender, don't send the message back to the client
 	select {
-		case client.Send <- message: // If the send channel is not full send the message
-		default:
-			delete(h.Clients, client) // Remove the client if the send channel is full
-			close(client.Send)        // Close the send channel
-		}
+	case client.Send <- message: // If the send channel is not full send the message
+	default:
+		delete(h.Clients, client) // Remove the client if the send channel is full
+		close(client.Send)        // Close the send channel
+	}
 }
-

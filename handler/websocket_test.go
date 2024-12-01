@@ -1,13 +1,14 @@
 package handler_test
 
 import (
+	"net/http"
+	"testing"
+
 	"github.com/gorilla/websocket"
 	"github.com/rateitorg/chatrooms/handler"
 	"github.com/rateitorg/chatrooms/test"
 	"github.com/rateitorg/chatrooms/test/mocks"
 	"github.com/stretchr/testify/mock"
-	"net/http"
-	"testing"
 )
 
 // TestWebSocketHandler tests the WebSocket upgrade logic.

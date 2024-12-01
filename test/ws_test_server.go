@@ -10,8 +10,8 @@ import (
 )
 
 type TestServer struct {
-	Server   *httptest.Server
-	URL      string
+	Server *httptest.Server
+	URL    string
 }
 
 // NewTestServer creates a new test server with custom handler.
@@ -23,8 +23,8 @@ func NewTestServerWithCustomHandler(handlerFunc http.HandlerFunc) *TestServer {
 	}))
 
 	return &TestServer{
-		Server:   server,
-		URL:      "ws" + server.URL[len("http"):],
+		Server: server,
+		URL:    "ws" + server.URL[len("http"):],
 	}
 }
 
@@ -52,8 +52,8 @@ func NewTestServerWithClientWrite(hub service.HubInterface) *TestServer {
 	}))
 
 	return &TestServer{
-		Server:   server,
-		URL:      "ws" + server.URL[len("http"):],
+		Server: server,
+		URL:    "ws" + server.URL[len("http"):],
 	}
 }
 

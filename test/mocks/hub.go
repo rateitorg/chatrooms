@@ -1,8 +1,8 @@
 package mocks
 
 import (
-	"github.com/rateitorg/chatrooms/service"
 	"github.com/rateitorg/chatrooms/entity"
+	"github.com/rateitorg/chatrooms/service"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -10,7 +10,7 @@ type Hub struct {
 	mock.Mock
 }
 
-func (m *Hub) SendToRegisterChannel(client *service.Client){
+func (m *Hub) SendToRegisterChannel(client *service.Client) {
 	m.Called(client)
 }
 
