@@ -17,7 +17,7 @@ func (vs *VersionService) GetVersionService() response.Response {
 
 	responseTime := fmt.Sprintf("%d/%d/%d %d:%d:%d", ct.Day(), ct.Month(), ct.Year(), ct.Hour(), ct.Minute(), ct.Second())
 
-	versionData := model.VersionResponse{
+	versionData := model.VersionModel{
 		Name:          config.API_NAME,
 		BuildDateTime: responseTime,
 		Version:       config.API_VERSION,
