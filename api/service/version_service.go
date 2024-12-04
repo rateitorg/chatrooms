@@ -14,13 +14,14 @@ type VersionService struct {
 
 func (vs *VersionService) GetVersionService() response.Response {
 	ct := time.Now() // Get current time
+	cfg := config.GetConfig()
 
 	responseTime := fmt.Sprintf("%d/%d/%d %d:%d:%d", ct.Day(), ct.Month(), ct.Year(), ct.Hour(), ct.Minute(), ct.Second())
 
 	versionData := model.VersionModel{
-		Name:          config.API_NAME,
+		Name:          cfg.APIName,
 		BuildDateTime: responseTime,
-		Version:       config.API_VERSION,
+		Version:       cfg.APIVersion,
 	}
 
 	response := response.Response{
