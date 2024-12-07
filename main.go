@@ -12,8 +12,8 @@ func init () {
 
 // API entry point
 func main () {
-	config.Init() // Add all .env values to app environment
+	cfg := config.GetConfig()
 	app := router.CreateRouter()
 
-	app.Run(":" + config.PORT)
+	app.Run(":" + cfg.Port)
 }
