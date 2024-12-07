@@ -43,3 +43,5 @@ We welcome contributions! Please look at [Contributing.md](https://github.com/ra
 The MIT License (MIT)
 
 Copyright (c) 2023 - 2024 Jake Brunning, Gabriel Guimaraes, Callun Thiart. All Rights Reserved.
+
+
